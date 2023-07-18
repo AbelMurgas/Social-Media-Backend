@@ -62,7 +62,15 @@ const fileFilter = (req, file, cb) => {
 };
 // app.use(bodyParser.urlencoded()); // x-www-form-urlencoded <form>
 app.use(bodyParser.json()); // application/json
-app.use(multer({ storage: storage, fileFilter: fileFilter }).single("image"));
+app.use(
+  multer({
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+      fileSize: 100 * 1024 * 1024, // Limit the file size to 100 MB
+    },
+  }).single("image")
+);
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -90,7 +98,7 @@ app.use((error, req, res, next) => {
 const server = http.createServer(app);
 const io = socket.init(server);
 
-console.log(process.env.MONGO_USER)
+console.log(process.env.MONGO_USER);
 mongoose.set("strictQuery", true);
 mongoose
   .connect(
