@@ -4,7 +4,7 @@ import io from "../socket.js";
 import Post from "../models/post.js";
 import User from "../models/user.js";
 
-import file from "../utils/file.js";
+import File from "../utils/file.js";
 const { validationResult } = validator;
 
 export const getPosts = async (req, res, next) => {
@@ -79,7 +79,7 @@ export const createPost = async (req, res, next) => {
       err.statusCode = 500;
     }
     if (req.file) {
-      file.clearImage(req.file.path);
+      File.clearImage(req.file.path);
     }
     console.log(err);
     next(err);
@@ -133,7 +133,7 @@ export const updatePost = async (req, res, next) => {
     if (!req.file) {
       imageUrl = post.imageUrl;
     } else {
-      file.clearImage(post.imageUrl);
+      File.clearImage(post.imageUrl);
       imageUrl = req.file.path.replace("\\", "/");
     }
     post.title = title;
@@ -144,7 +144,7 @@ export const updatePost = async (req, res, next) => {
     res.status(200).json({ message: "Post updated!", post: post });
   } catch (error) {
     try {
-      file.clearImage(req.file.path);
+      File.clearImage(req.file.path);
     } catch {
       console.log("File no found");
     }
@@ -173,7 +173,7 @@ export const deletePost = async (req, res, next) => {
     user.posts.pull(postId);
     await user.save();
     const postDeleted = await Post.findByIdAndDelete(post);
-    file.clearImage(postDeleted.imageUrl);
+    File.clearImage(postDeleted.imageUrl);
     // const posts = await Post.find()
     // .sort({createdAt: 1})
     // .populate("creator");

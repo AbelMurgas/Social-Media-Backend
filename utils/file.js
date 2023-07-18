@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-export default class file {
+export default class File {
  static clearImage = (filePath) =>{
   if (!filePath){
    console.log("no file received")
