@@ -1,0 +1,9 @@
+node_modules
+# Images
+*.png
+*.jpeg
+*.jpg 
+#  Enviroment
+development.env
+production.env
+*.log
