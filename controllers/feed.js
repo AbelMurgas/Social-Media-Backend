@@ -174,14 +174,14 @@ export const deletePost = async (req, res, next) => {
     await user.save();
     const postDeleted = await Post.findByIdAndDelete(post);
     File.clearImage(postDeleted.imageUrl);
-    // const posts = await Post.find()
-    // .sort({createdAt: 1})
-    // .populate("creator");
-    // io.getIO().emit("posts", {
-    //   action: "delete",
-    //   post: postDeleted,
-    // });
-    res.status(200).json({ message: "Successfully deleted" });
+    const posts = await Post.find()
+    .sort({createdAt: 1})
+    .populate("creator");
+    io.getIO().emit("posts", {
+      action: "delete",
+      post: postDeleted,
+    });
+    res.status(200).json({ message: "Successfully deleted" , data: posts});
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
