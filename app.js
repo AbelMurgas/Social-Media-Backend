@@ -2,7 +2,6 @@ import express from "express";
 import bodyParser from "body-parser";
 import http from "http";
 import helmet from "helmet";
-import config from "./config.js";
 import compression from "compression";
 import morgan from "morgan";
 import fs from "fs";
