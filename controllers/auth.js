@@ -41,42 +41,46 @@ export const signup = (req, res, next) => {
     });
 };
 
-export const login = (req, res, next) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  let loadedUser;
-  User.findOne({ email: email })
-    .then((user) => {
-      if (!user) {
-        const error = new Error("A user not found");
-        error.statusCode = 401;
-        throw error;
-      }
-      loadedUser = user;
-      return bcrypt.compare(password, user.password);
-    })
-    .then((isEqual) => {
-      if (!isEqual) {
-        const error = new Error("Wrong Password!");
-        error.statusCode = 401;
-        throw error;
-      }
-      const token = jwt.sign(
-        {
-          email: loadedUser.email,
-          userId: loadedUser._id.toString(),
-        },
-        "secret",
-        { expiresIn: "1h" }
-      );
-      
-      res.status(200).json({ token: token, userId: loadedUser._id.toString() });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      console.log(err);
-      next(err);
-    });
+export const login = async (req, res, next) => {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    // Use parameterized query with Mongoose
+    const user = await User.findOne({ email: email }).exec();
+
+    if (!user) {
+      const error = new Error("A user not found");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    const isEqual = await bcrypt.compare(password, user.password);
+
+    if (!isEqual) {
+      const error = new Error("Wrong Password!");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    const jwtSecret = "secret";
+
+    const token = jwt.sign(
+      {
+        email: user.email,
+        userId: user._id.toString(),
+      },
+      jwtSecret,
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token: token, userId: user._id.toString() });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    console.log(err);
+    next(err);
+  }
 };
+
