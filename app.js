@@ -21,6 +21,8 @@ import path from "path";
 
 import { fileURLToPath } from "url";
 
+import config from "./config.js";
+
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
@@ -101,11 +103,11 @@ app.use((error, req, res, next) => {
 const server = http.createServer(app);
 const io = socket.init(server);
 
-console.log(process.env.MONGO_USER);
+
 mongoose.set("strictQuery", true);
 mongoose
   .connect(
-    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.ssc1tcl.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`
+    `mongodb+srv://${config.MONGO_USER}:${config.MONGO_PASSWORD}@cluster0.ssc1tcl.mongodb.net/${config.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`
   )
   .then((result) => {
     server.listen(process.env.PORT || 3000);

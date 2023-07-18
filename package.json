@@ -10,7 +10,7 @@
   "scripts": {
     "test": "mocha",
     "start": "NODE_ENV=production MONGO_USER=abelm MONGO_PASSWORD=Yn9WFEIiao46gta4 MONGO_DEFAULT_DATABASE=messages node app.js",
-    "start-dev": "set NODE_ENV=development&& nodemon app.js",
+    "start-dev": "set NODE_ENV=development && nodemon app.js",
     "start-server": "set NODE_ENV=production&& node app.js"
   },
   "keywords": [],
