@@ -24,7 +24,7 @@ export const serveImage = (req, res, next) => {
       default:
         contentType = "application/octet-stream";
     }
-    res.contentType("image/jpeg");
+    res.contentType(contentType);
     res.send(data);
   });
 };
